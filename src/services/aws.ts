@@ -97,6 +97,10 @@ const getFileFromUrlKey = (url: string) => {
 export const deleteFromAWS = async (
   fileUrl: string,
 ): Promise<DeleteObjectCommandOutput> => {
+  if (!fileUrl) {
+    return;
+  }
+
   const fileName = getFileFromUrlKey(fileUrl);
 
   console.log({ fileName });
