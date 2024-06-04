@@ -91,6 +91,12 @@ export const uploadAWS = async (file: {
 };
 
 const getFileFromUrlKey = (url: string) => {
+  console.log({ url });
+
+  if (typeof url !== "string") {
+    return null;
+  }
+
   return url?.split("?")[0].split("/").pop();
 };
 
@@ -101,9 +107,13 @@ export const deleteFromAWS = async (
     return true;
   }
 
-  const fileName = getFileFromUrlKey(fileUrl);
+  const fileName = getFileFromUrlKey(fileUrl || "");
 
   console.log({ fileName });
+
+  if (!fileName) {
+    return true;
+  }
 
   const client = s3;
   const input = {
