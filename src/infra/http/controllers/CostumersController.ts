@@ -193,9 +193,9 @@ export class CostumersController {
     });
 
     const costumerImagesToDelete = [
-      costumerToDelete?.cpfDoc,
-      costumerToDelete?.rgDoc,
-      costumerToDelete?.otherDoc,
+      costumerToDelete?.cpfDoc || undefined,
+      costumerToDelete?.rgDoc || undefined,
+      costumerToDelete?.otherDoc || undefined,
     ].filter(e => Boolean(e));
 
     const costumerResult = await CostumerModel.findOneAndDelete({
@@ -211,16 +211,16 @@ export class CostumersController {
 
     if (imagesToDelete.length > 0) {
       imagesDeletionResult = imagesToDelete.map(async (e: string) => {
-        const res = await deleteFromAWS(e);
+        const res = await deleteFromAWS(e || "");
         return Boolean(res) as boolean;
       });
     }
 
-    const deletionResult = imagesDeletionResult.some((e: any) => !e);
+    const deletionResult = imagesDeletionResult.some((e: any) => e === false);
 
     console.log({ imagesToDelete, imagesDeletionResult, deletionResult });
 
-    if (costumerResult && debtsResult && deletionResult) {
+    if (costumerResult && debtsResult) {
       res.status(200).json({
         message: "Costumer Removed Sucessfully",
       });
